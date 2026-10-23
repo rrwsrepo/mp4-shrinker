@@ -1,0 +1,68 @@
+<Window x:Class="MP4Shrinker.App.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ Title="MP4 Shrinker" Width="1120" Height="920" MinWidth="900" MinHeight="740" WindowStartupLocation="CenterScreen"
+ AllowDrop="True" Drop="OnDrop" DragOver="OnDragOver" Closing="OnClosing" Loaded="OnLoaded" FontFamily="Segoe UI" FontSize="14">
+ <Grid Margin="24,18">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+  <DockPanel Margin="0,0,0,14">
+   <Button DockPanel.Dock="Right" Content="About" Command="{Binding AboutCommand}"/>
+   <StackPanel><TextBlock Text="MP4 Shrinker" FontSize="28" FontWeight="SemiBold"/><TextBlock Text="Smaller videos. Same folder structure. Originals always stay yours." Opacity="0.75" Margin="0,4,0,0"/></StackPanel>
+  </DockPanel>
+  <ScrollViewer Grid.Row="1" MaxHeight="355" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+   <Border Style="{StaticResource Card}">
+    <StackPanel IsEnabled="{Binding Idle}">
+     <TextBlock Text="SOURCE FOLDER" FontSize="11" FontWeight="Bold" Opacity="0.7" Margin="0,0,0,6"/>
+     <DockPanel><Button DockPanel.Dock="Right" Content="Browse…" Command="{Binding BrowseCommand}"/><TextBox Text="{Binding SourceFolder,UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Source folder" ToolTip="Choose or drop the original folder"/></DockPanel>
+     <DockPanel Margin="0,8,0,14"><TextBlock Text="Output  " FontWeight="SemiBold"/><TextBlock Text="{Binding OutputFolder}" TextTrimming="CharacterEllipsis" ToolTip="{Binding OutputFolder}" Opacity="0.8"/></DockPanel>
+     <Grid>
+      <Grid.ColumnDefinitions><ColumnDefinition Width="1.1*"/><ColumnDefinition Width="1.5*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="1.1*"/></Grid.ColumnDefinitions>
+      <StackPanel><TextBlock Text="Quality"/><ComboBox ItemsSource="{Binding QualityChoices}" SelectedIndex="{Binding QualityIndex}" AutomationProperties.Name="Quality"/></StackPanel>
+      <StackPanel Grid.Column="1"><TextBlock Text="Encoder"/><ComboBox ItemsSource="{Binding EncoderChoices}" SelectedIndex="{Binding EncoderIndex}" AutomationProperties.Name="Encoder" ToolTip="Hardware modes are faster; quality scales differ from CPU CRF. Each is tested before encoding."/></StackPanel>
+      <StackPanel Grid.Column="2"><TextBlock Text="CPU speed"/><ComboBox ItemsSource="{Binding SpeedChoices}" SelectedIndex="{Binding SpeedIndex}" AutomationProperties.Name="Encoding speed" ToolTip="A slower CPU preset usually improves compression efficiency, but takes longer."/></StackPanel>
+      <StackPanel Grid.Column="3"><TextBlock Text="Audio (all tracks)"/><ComboBox ItemsSource="{Binding AudioChoices}" SelectedIndex="{Binding AudioIndex}" AutomationProperties.Name="Audio mode"/></StackPanel>
+     </Grid>
+     <TextBlock Text="High quality is a lossy re-encode, not mathematically lossless. Resolution and frame timing are preserved." FontSize="12" Opacity="0.7" Margin="0,10,0,8" TextWrapping="Wrap"/>
+     <WrapPanel><CheckBox Content="Preserve file dates" IsChecked="{Binding PreserveDates}"/><CheckBox Content="Optimize for web playback" IsChecked="{Binding FastStart}"/><CheckBox Content="Shut down after a successful batch" IsChecked="{Binding Shutdown}" ToolTip="60-second cancellable countdown. Never shuts down after cancellation, a failed file, or an incomplete scan."/></WrapPanel>
+     <Expander Header="Advanced settings and existing outputs" Margin="0,8,0,0">
+      <StackPanel Margin="0,12,0,0">
+       <WrapPanel VerticalAlignment="Center"><TextBlock Text="Existing outputs" VerticalAlignment="Center" Margin="0,0,10,0"/><ComboBox Width="270" ItemsSource="{Binding ExistingChoices}" SelectedIndex="{Binding ExistingIndex}" AutomationProperties.Name="Existing output policy"/><CheckBox Content="Keep output even when larger" IsChecked="{Binding KeepLarger}"/><CheckBox Content="CPU fallback if hardware fails" IsChecked="{Binding CpuFallback}"/></WrapPanel>
+       <WrapPanel Margin="0,8,0,0"><TextBlock Text="CPU CRF (16–28)" VerticalAlignment="Center" Margin="0,0,10,0"/><TextBox Width="64" Text="{Binding Crf,UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="CPU CRF"/><TextBlock Text="CPU preset" VerticalAlignment="Center" Margin="24,0,10,0"/><ComboBox Width="145" ItemsSource="{Binding Presets}" SelectedItem="{Binding Preset}" AutomationProperties.Name="Advanced CPU preset"/></WrapPanel>
+       <TextBlock Text="Unsupported HDR, pixel formats, or extra streams are flagged in the queue. No silent track loss." Opacity="0.7" FontSize="12" Margin="0,12,0,0"/>
+      </StackPanel>
+     </Expander>
+    </StackPanel>
+   </Border>
+  </ScrollViewer>
+  <Border Grid.Row="2" Style="{StaticResource Card}">
+   <StackPanel>
+    <DockPanel><TextBlock DockPanel.Dock="Right" Text="{Binding CurrentPercent,StringFormat={}{0:0.0}%}" FontWeight="SemiBold"/><TextBlock Text="{Binding CurrentFile}" TextTrimming="CharacterEllipsis" FontWeight="SemiBold"/></DockPanel>
+    <ProgressBar Value="{Binding CurrentPercent}" Height="8" Margin="0,10,0,6" AutomationProperties.Name="Current file progress"/>
+    <DockPanel><TextBlock DockPanel.Dock="Right" Text="{Binding Speed}"/><TextBlock Text="{Binding FileSizes}" FontSize="12" Opacity="0.75"/></DockPanel>
+    <DockPanel Margin="0,12,0,4"><TextBlock DockPanel.Dock="Right" Text="{Binding OverallPercent,StringFormat={}{0:0.0}% overall}"/><TextBlock Text="{Binding QueueInfo}"/></DockPanel>
+    <ProgressBar Value="{Binding OverallPercent}" Height="5" IsIndeterminate="{Binding Scanning}" AutomationProperties.Name="Overall batch progress"/>
+    <TextBlock Text="{Binding BatchTotals}" FontSize="12" Opacity="0.75" Margin="0,8,0,0"/>
+   </StackPanel>
+  </Border>
+  <Grid Grid.Row="3" MinHeight="110">
+   <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+   <DataGrid ItemsSource="{Binding JobsView}" SelectedItem="{Binding SelectedJob}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" EnableRowVirtualization="True" EnableColumnVirtualization="True" HeadersVisibility="Column" GridLinesVisibility="None" RowHeight="34" AutomationProperties.Name="Compression queue">
+    <DataGrid.Columns><DataGridTextColumn Header="File" Binding="{Binding File}" Width="*"/><DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="110"/><DataGridTextColumn Header="Original" Binding="{Binding Original}" Width="100"/><DataGridTextColumn Header="New" Binding="{Binding Output}" Width="100"/><DataGridTextColumn Header="Progress" Binding="{Binding Percentage,StringFormat={}{0:0}%}" Width="90"/></DataGrid.Columns>
+    <DataGrid.RowStyle><Style TargetType="DataGridRow"><Setter Property="ToolTip" Value="{Binding Details}"/><Style.Triggers><DataTrigger Binding="{Binding Failed}" Value="True"><Setter Property="FontWeight" Value="SemiBold"/></DataTrigger></Style.Triggers></Style></DataGrid.RowStyle>
+   </DataGrid>
+   <TextBox Grid.Row="1" Text="{Binding SelectedJob.Details,Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" MaxHeight="76" MinHeight="28" VerticalScrollBarVisibility="Auto" BorderThickness="0" Margin="0,4,0,4" AutomationProperties.Name="Selected file details"/>
+  </Grid>
+  <StackPanel Grid.Row="4">
+   <ScrollViewer MaxHeight="62" VerticalScrollBarVisibility="Auto"><TextBlock Text="{Binding Status}" TextWrapping="Wrap" Margin="0,6,0,2" AutomationProperties.LiveSetting="Polite"/></ScrollViewer>
+   <TextBlock Text="{Binding DiskNote}" FontSize="12" Opacity="0.75" TextTrimming="CharacterEllipsis" ToolTip="{Binding DiskNote}"/>
+   <DockPanel Margin="0,8,0,0" LastChildFill="False">
+    <Button Content="Start compression" Command="{Binding StartCommand}" Background="#2264D1" Foreground="White" FontWeight="SemiBold"/>
+    <Button Content="Scan" Command="{Binding ScanCommand}"/>
+    <Button Content="{Binding PauseText}" Command="{Binding PauseCommand}"/>
+    <Button Content="Cancel" Command="{Binding CancelCommand}"/>
+    <Button DockPanel.Dock="Right" Content="Logs" Command="{Binding LogsCommand}"/>
+    <Button DockPanel.Dock="Right" Content="Output folder" Command="{Binding OutputCommand}"/>
+    <CheckBox DockPanel.Dock="Right" Content="Failed only" IsChecked="{Binding FailedOnly}" VerticalAlignment="Center" Margin="10,0"/>
+   </DockPanel>
+   <Button Content="Cancel shutdown" Command="{Binding CancelShutdownCommand}" HorizontalAlignment="Right"><Button.Style><Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}"><Style.Triggers><Trigger Property="IsEnabled" Value="False"><Setter Property="Visibility" Value="Collapsed"/></Trigger></Style.Triggers></Style></Button.Style></Button>
+  </StackPanel>
+ </Grid>
+</Window>

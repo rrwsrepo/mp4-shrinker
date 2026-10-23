@@ -1,0 +1,8 @@
+**/bin/
+**/obj/
+artifacts/
+.vs/
+*.user
+*.suo
+*.zip
+third-party/sources/*.tar.gz

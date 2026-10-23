@@ -1,0 +1,56 @@
+MP4 SHRINKER 1.0.0 - THIRD-PARTY NOTICES
+
+FFmpeg and ffprobe
+------------------
+These are separate, unmodified command-line executables from BtbN/FFmpeg-Builds.
+Package: ffmpeg-n9.0-latest-win64-gpl-9.0.zip
+Exact embedded version: n9.0.2-33-g4cf298e66a-20261022
+Original archive SHA-256:
+8e90bb6e8d6c6d2cf8e2d20ed47e0867a68f1f57ad8e24161e2ac9ab0fabe29c
+
+The download was checked against the publisher's GitHub asset digest before
+packaging. This is the GPL variant, not the nonfree variant. Its configuration
+enables GPL and version 3, including libx265 and libx264. The complete original
+GPLv3 text is retained verbatim in third-party/FFmpeg-GPL-3.0.txt.
+
+Project: https://ffmpeg.org/
+Licence information: https://ffmpeg.org/legal.html
+Binary provider: https://github.com/BtbN/FFmpeg-Builds
+Release: https://github.com/BtbN/FFmpeg-Builds/releases
+Exact FFmpeg source: https://github.com/FFmpeg/FFmpeg/tree/4cf298e66a
+Exact build recipes:
+https://github.com/BtbN/FFmpeg-Builds/tree/937868360a21d711ec94a33f5591d345ad9b7754
+
+The portable/source ZIPs include the FFmpeg source snapshot and build-recipe
+archive. This Git repository provides pinned download links in
+third-party/sources/README.md. The recipe snapshot contains dependency revisions,
+upstream source locations, applied patches and build instructions. A readable
+dependency source index is included as third-party/DEPENDENCY-SOURCES.txt.
+FFMPEG-BUILD-CONFIG.txt records the embedded build configuration.
+FFMPEG-PROVENANCE.json records download provenance and executable hashes.
+
+The additional libraries statically included by the binary provider retain
+their own copyright and licensing terms. Upstream source snapshots and the
+pinned build scripts identify these components and their licence files.
+Retain the notices and provide the corresponding source access required by
+the applicable licences when redistributing the FFmpeg binaries.
+The local source snapshots are not a complete mirror of every dependency.
+
+.NET / WPF
+----------
+The app is published self-contained with .NET 10.0.13 (SDK 10.0.402).
+.NET is provided by Microsoft and contributors under its applicable licences.
+The SDK/runtime licence and notices are retained verbatim:
+  third-party/DOTNET-LICENSE.txt
+  third-party/DOTNET-THIRD-PARTY-NOTICES.txt
+
+Sources and licences:
+https://github.com/dotnet/runtime
+https://github.com/dotnet/wpf
+
+Application
+-----------
+MP4 Shrinker invokes FFmpeg/ffprobe through their command-line interface using
+separate processes. It does not link FFmpeg libraries into its C# application.
+The app's source code and tests are supplied separately with this delivery.
+The app uses no additional third-party NuGet UI or MVVM framework.

@@ -1,0 +1,93 @@
+MP4 SHRINKER 1.0.0 - BUILD AND VALIDATION REPORT
+23 October 2026
+
+BUILD
+.NET SDK 10.0.402 / runtime 10.0.13
+Windows x64 WPF application, self-contained, single-file, untrimmed.
+Solution build: succeeded with 0 warnings and 0 errors.
+Publish: succeeded. Output is a Windows x86-64 GUI PE executable.
+FFmpeg Windows archive SHA-256 matches the publisher-provided digest.
+Exact bundled FFmpeg: n9.0.2-33-g4cf298e66a-20261022 (BtbN GPL static build).
+
+EXECUTED AUTOMATED CHECKS
+Host: Ubuntu 24.04.3 LTS
+Media integration engine: system FFmpeg 6.1.1-3ubuntu5, libx265.
+The same Core library used by the WPF app is exercised by these tests.
+Synthetic sources are hashed before and after processing to verify integrity.
+The tests include successful encodes, validation, explicit conflicts, failed
+replacement, safe temporary cleanup, source-change refusal and cancellation.
+
+PASS Defaults match the handoff
+PASS Mirrored nested paths with Unicode, spaces and apostrophes
+PASS Reject drive/root selection
+PASS Reject output folder and descendants
+PASS Reject marked outputs even when renamed
+PASS Containment is separator aware and Windows case insensitive
+PASS Reject source traversal
+PASS Reject output junction/symlink ancestor
+PASS Microsecond progress and clamp
+PASS Progress time fallback, invalid data and end
+PASS CPU argument list preserves filenames and streams
+PASS All audio tracks receive codec options
+PASS Compatible copy mode and incompatible copy rejection
+PASS Hardware uses distinct rate-control options
+PASS 10-bit SDR stays 10-bit
+PASS HDR, subtitles and extra streams cannot silently disappear
+PASS Unknown duration and unusual pixel format fail safely
+PASS Only-smaller safeguard
+PASS Output duration tolerance
+PASS Reject missing audio, changed channels and rotation
+PASS Settings roundtrip and corrupt-file fallback
+PASS Reject invalid quality and preset injection
+PASS History detects changed input, output and settings
+PASS Recovery only removes a registered owned temporary
+PASS Shutdown is disallowed after failures/cancellation
+PASS Real scanning handles uppercase MP4 and corrupt media
+PASS Real FFmpeg batch: multiple audio, silent, rotation, subtitles and corrupt-file isolation
+PASS All originals remain byte-for-byte unchanged
+PASS No temporary outputs masquerade as final files
+PASS Second batch validates and skips completed outputs
+PASS Changed quality causes explicit existing-output conflicts
+PASS Unverified existing output is not overwritten
+PASS Explicit overwrite replaces only the output
+PASS Scanner ignores directory links
+PASS Cancellation kills FFmpeg and drains streams
+PASS Cancel mid-batch removes temporary and leaves next file pending
+PASS Larger encode is discarded by default
+PASS Source changed since scan is refused
+PASS CPU encoder is tested with a real encode
+PASS Chapter titles and counts survive a real encode
+PASS 720p, 1080p, 4K and 10-bit SDR dimensions are retained
+PASS Long nested Unicode paths are processed
+PASS Failed overwrite leaves previous valid output untouched
+
+RESULT: 43 passed, 0 failed. Platform: Ubuntu 24.04.3 LTS
+
+
+NOT RUN IN THIS ENVIRONMENT
+- Native Windows app launch, keyboard interaction and layout at different DPI.
+- The exact bundled Windows FFmpeg/ffprobe executables.
+- GPU driver/device encoding (NVIDIA NVENC, Intel QSV, AMD AMF).
+- A clean Windows machine without a separately installed .NET runtime.
+- Windows source-file locks, protected paths/ACLs and long-path OS policy.
+- Actual power-off or cancellation of the Windows shutdown countdown.
+- Physical disk-full or removable-drive removal simulation.
+- Hours-long/high-volume media or human playback and A/V sync review.
+
+WINDOWS SMOKE-TEST CHECKLIST
+1. Extract the full portable ZIP and launch MP4-Shrinker.exe.
+2. Check system light/dark mode, keyboard focus, 100/150/200% DPI and resizing.
+3. Scan a test folder with nested Unicode filenames. Start using defaults.
+4. Play the output and check orientation, audio sync, subtitles and chapters.
+5. Cancel while encoding. Confirm no final/temporary incomplete MP4 remains.
+6. Close during encoding and reopen; completed outputs must remain untouched.
+7. Re-run unchanged settings and confirm existing verified outputs are skipped.
+8. Select a GPU mode and check the real encoder test and CPU fallback message.
+9. Test low-space/unwritable output handling and verify source file hashes.
+10. Enable shutdown only on a suitable test machine, then cancel the countdown.
+
+LIMITS
+HDR and unusual streams/pixel formats are refused rather than transformed.
+Compression is lossy and savings vary. Stream validation is not a perceptual
+quality metric or a complete second decode. No claim of native Windows/GPU
+runtime testing is made by this report.

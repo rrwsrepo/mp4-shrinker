@@ -1,0 +1,13 @@
+{
+  "provider": "BtbN/FFmpeg-Builds",
+  "package": "ffmpeg-n9.0-latest-win64-gpl-9.0.zip",
+  "download_url": "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n9.0-latest-win64-gpl-9.0.zip",
+  "upstream_sha256": "sha256:8e90bb6e8d6c6d2cf8e2d20ed47e0867a68f1f57ad8e24161e2ac9ab0fabe29c",
+  "build_version": "n9.0.2-33-g4cf298e66a-20261022",
+  "ffmpeg_source": "https://github.com/FFmpeg/FFmpeg/tree/4cf298e66a",
+  "build_recipes_revision": "937868360a21d711ec94a33f5591d345ad9b7754",
+  "files": {
+    "ffmpeg.exe": "1cbff81436de6364012b356726b46edfde4200f9d38d4622ff4f4978af0218f8",
+    "ffprobe.exe": "3298debc7334bc482b771541ada41e5f6208f6e4014fc644ed7ebd0ac5cd9709"
+  }
+}
